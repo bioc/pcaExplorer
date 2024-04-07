@@ -2,6 +2,7 @@
 % Please edit documentation in R/pcaExplorer-pkg.R
 \docType{package}
 \name{pcaExplorer-pkg}
+\alias{pcaExplorer-package}
 \alias{pcaExplorer-pkg}
 \title{pcaExplorer: analyzing time-lapse microscopy imaging, from detection to tracking}
 \description{
@@ -13,6 +14,15 @@ extraction and effective data exploration. A Shiny application encapsulates the 
 pcaExplorer provides functionality for interactive visualization of RNA-seq datasets
 based on Principal Components Analysis. The methods provided allow for quick information
 extraction and effective data exploration. A Shiny application encapsulates the whole analysis.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/federicomarini/pcaExplorer}
+  \item \url{https://federicomarini.github.io/pcaExplorer/}
+  \item Report bugs at \url{https://github.com/federicomarini/pcaExplorer/issues}
+}
+
 }
 \author{
 Federico Marini \email{marinif@uni-mainz.de}, 2016
