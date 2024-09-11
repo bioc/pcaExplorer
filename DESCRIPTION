@@ -15,6 +15,7 @@ LazyData: TRUE
 Imports: 
     DESeq2, 
     SummarizedExperiment, 
+    mosdef,
     GenomicRanges, 
     IRanges,
     S4Vectors, 
