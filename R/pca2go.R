@@ -133,14 +133,22 @@ pca2go <- function(se,
   
   message("Ranking genes by the loadings ... done!")
   message("Extracting functional categories enriched in the gene subsets ...")
-  topGOpc1pos <- topGOtable(probesPC1pos, BGids, annot = annFUN.org, mapping = annopkg, ...)
-  topGOpc1neg <- topGOtable(probesPC1neg, BGids, annot = annFUN.org, mapping = annopkg, ...)
-  topGOpc2pos <- topGOtable(probesPC2pos, BGids, annot = annFUN.org, mapping = annopkg, ...)
-  topGOpc2neg <- topGOtable(probesPC2neg, BGids, annot = annFUN.org, mapping = annopkg, ...)
-  topGOpc3pos <- topGOtable(probesPC3pos, BGids, annot = annFUN.org, mapping = annopkg, ...)
-  topGOpc3neg <- topGOtable(probesPC3neg, BGids, annot = annFUN.org, mapping = annopkg, ...)
-  topGOpc4pos <- topGOtable(probesPC4pos, BGids, annot = annFUN.org, mapping = annopkg, ...)
-  topGOpc4neg <- topGOtable(probesPC4neg, BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc1pos <- mosdef::run_topGO(de_genes = probesPC1pos, 
+                                   bg_genes = BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc1neg <- mosdef::run_topGO(de_genes = probesPC1neg, 
+                                   bg_genes = BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc2pos <- mosdef::run_topGO(de_genes = probesPC2pos, 
+                                   bg_genes = BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc2neg <- mosdef::run_topGO(de_genes = probesPC2neg, 
+                                   bg_genes = BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc3pos <- mosdef::run_topGO(de_genes = probesPC3pos, 
+                                   bg_genes = BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc3neg <- mosdef::run_topGO(de_genes = probesPC3neg, 
+                                   bg_genes = BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc4pos <- mosdef::run_topGO(de_genes = probesPC4pos, 
+                                   bg_genes = BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc4neg <- mosdef::run_topGO(de_genes = probesPC4neg, 
+                                   bg_genes = BGids, annot = annFUN.org, mapping = annopkg, ...)
 
   goEnrichs <- list(PC1 = list(posLoad = topGOpc1pos, negLoad = topGOpc1neg),
                     PC2 = list(posLoad = topGOpc2pos, negLoad = topGOpc2neg),
