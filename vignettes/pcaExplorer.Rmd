@@ -609,6 +609,8 @@ topgoDE_airway <- topGOtable(de_symbols, bg_symbols,
                              geneID = "symbol")
 ```
 
+From version 2.32.0 onwards, the `topGOtable()` function has been deprecated, in favor of the equivalent `mosdef::run_topGO()` function, which is more robust and flexible in its usage.
+
 ## `pca2go` {#pca2go-docs}
 
 `pca2go` provides a functional interpretation of the principal components, by extracting the genes with the highest loadings for each PC, and then runs internally `topGOtable` on them for efficient functional enrichment analysis.
