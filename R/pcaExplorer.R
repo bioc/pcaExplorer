@@ -40,7 +40,9 @@
 #'
 #' pcaExplorer() # and then upload count matrix, covariate matrix (and eventual annotation)
 #' }
-#'
+#' 
+#' @importFrom mosdef gene_plot
+#' 
 #' @export
 pcaExplorer <- function(dds = NULL,
                         dst = NULL,
@@ -1723,48 +1725,35 @@ pcaExplorer <- function(dds = NULL,
 
       genedata$sampleID <- rownames(genedata)
 
-      # input$plot_style chooses the style of plotting
       if (input$plot_style == "boxplot") {
-        res <- ggplot(genedata, aes_string(x = "plotby", y = "count", fill = "plotby")) +
-          geom_boxplot(outlier.shape = NA, alpha=0.7) + theme_bw()
-        if (input$ylimZero_genes) {
-          res <- res + scale_y_log10(name = "Normalized counts - log10 scale", limits = c(0.4, NA))
-        } else {
-          res <- res + scale_y_log10(name = "Normalized counts - log10 scale")
-        }
-
-        res <- res +
-          labs(title = paste0("Normalized counts for ", selectedGeneSymbol, " - ", selectedGene)) +
-          scale_x_discrete(name = "") +
-          geom_jitter(aes_string(x = "plotby", y = "count"), position = position_jitter(width = 0.1)) +
-          scale_fill_discrete(name = "Experimental\nconditions")
-        # if(input$addsamplelabels){
-        #   res <- res + geom_text(aes(label=sampleID),hjust=-.1,vjust=0)
-        # }
-
-        exportPlots$genesBoxplot <- res
-        res
-      } else if (input$plot_style == "violin plot"){
-        res <- ggplot(genedata, aes_string(x = "plotby", y = "count", fill = "plotby")) +
-          geom_violin(aes_string(col = "plotby"), alpha = 0.6) + theme_bw()
-        if (input$ylimZero_genes){
-          res <- res + scale_y_log10(name = "Normalized counts - log10 scale", limits = c(0.4, NA))
-        } else {
-          res <- res + scale_y_log10(name = "Normalized counts - log10 scale")
-        }
-
-        res <- res +
-          labs(title = paste0("Normalized counts for ", selectedGeneSymbol, " - ", selectedGene)) +
-          scale_x_discrete(name = "") +
-          geom_jitter(aes_string(x = "plotby", y = "count"), alpha = 0.8, position = position_jitter(width = 0.1)) +
-          scale_fill_discrete(name = "Experimental\nconditions") + scale_color_discrete(guide = "none")
-        # if(input$addsamplelabels){
-        #   res <- res + geom_text(aes(label=sampleID),hjust=-.1,vjust=0)
-        # }
-
-        exportPlots$genesBoxplot <- res
-        res
+        plot_style <- "boxplot"
+      } else if (input$plot_style == "violin plot") {
+        plot_style <- "violin"
+      } else {
+        plot_style <- "auto"
       }
+      
+      res <- mosdef::gene_plot(de_container = values$mydds,
+                               gene = selectedGene,
+                               intgroup = input$color_by,
+                               annotation_obj = values$myannotation,
+                               normalized = TRUE,
+                               plot_type = plot_style)
+      
+      if (input$ylimZero_genes) {
+        res <- res + scale_y_log10(name = "Normalized counts - log10 scale", limits = c(0.4, NA))
+      } else {
+        res <- res + scale_y_log10(name = "Normalized counts - log10 scale")
+      }
+      
+      res <- res +
+        labs(title = paste0("Normalized counts for ", selectedGeneSymbol, " - ", selectedGene)) +
+        scale_x_discrete(name = "") +
+        scale_fill_discrete(name = "Experimental\nconditions")
+      
+      exportPlots$genesBoxplot <- res
+      
+      res
     })
 
     # for reading in the brushed/clicked points
@@ -1933,47 +1922,38 @@ pcaExplorer <- function(dds = NULL,
       onlyfactors <- genedata[, match(input$color_by, colnames(genedata))]
       genedata$plotby <- interaction(onlyfactors)
       genedata$sampleID <- rownames(genedata)
-
-      # input$plot_style chooses the style of plotting
+      
       if (input$plot_style == "boxplot") {
-        res <- ggplot(genedata, aes_string(x = "plotby", y = "count", fill = "plotby")) +
-          geom_boxplot(outlier.shape = NA, alpha = 0.7) + theme_bw()
-        if (input$ylimZero) {
-          res <- res + scale_y_log10(name = "Normalized counts - log10 scale", limits = c(0.4, NA))
-        } else {
-          res <- res + scale_y_log10(name = "Normalized counts - log10 scale")
-        }
-
-        res <- res +
-          labs(title = paste0("Normalized counts for ", selectedGeneSymbol, " - ", selectedGene)) +
-          scale_x_discrete(name = "") +
-          geom_jitter(aes_string(x = "plotby", y = "count"), position = position_jitter(width = 0.1)) +
-          scale_fill_discrete(name = "Experimental\nconditions")
-        if (input$addsamplelabels) {
-          res <- res + geom_text(aes_string(label = "sampleID"), hjust = -.1, vjust = 0)
-        }
-        exportPlots$genefinder_countsplot <- res
-        res
+        plot_style <- "boxplot"
       } else if (input$plot_style == "violin plot") {
-        res <- ggplot(genedata, aes_string(x = "plotby", y = "count", fill = "plotby")) +
-          geom_violin(aes_string(col = "plotby"), alpha = 0.6) + theme_bw()
-        if (input$ylimZero) {
-          res <- res + scale_y_log10(name = "Normalized counts - log10 scale", limits = c(0.4, NA))
-        } else {
-          res <- res + scale_y_log10(name = "Normalized counts - log10 scale")
-        }
-
-        res <- res +
-          labs(title = paste0("Normalized counts for ", selectedGeneSymbol, " - ", selectedGene)) +
-          scale_x_discrete(name = "") +
-          geom_jitter(aes_string(x = "plotby", y = "count"), alpha = 0.8, position = position_jitter(width = 0.1)) +
-          scale_fill_discrete(name = "Experimental\nconditions") + scale_color_discrete(guide = "none")
-        if (input$addsamplelabels) {
-          res <- res + geom_text(aes_string(label = "sampleID"), hjust = -.1, vjust = 0)
-        }
-        exportPlots$genefinder_countsplot <- res
-        res
+        plot_style <- "violin"
+      } else {
+        plot_style <- "auto"
       }
+      
+      res <- mosdef::gene_plot(de_container = values$mydds,
+                               gene = selectedGene,
+                               intgroup = input$color_by,
+                               annotation_obj = values$myannotation,
+                               normalized = TRUE,
+                               labels_display = input$addsamplelabels,
+                               plot_type = plot_style)
+      
+      if (input$ylimZero) {
+        res <- res + scale_y_log10(name = "Normalized counts - log10 scale", limits = c(0.4, NA))
+      } else {
+        res <- res + scale_y_log10(name = "Normalized counts - log10 scale")
+      }
+      
+      res <- res +
+        labs(title = paste0("Normalized counts for ", selectedGeneSymbol, " - ", selectedGene)) +
+        scale_x_discrete(name = "") +
+        scale_fill_discrete(name = "Experimental\nconditions")
+      
+      exportPlots$genefinder_countsplot <- res
+      
+      res
+      
     })
 
     output$genefinder_table <- DT::renderDataTable({
