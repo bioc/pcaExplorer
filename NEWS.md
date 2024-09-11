@@ -1,3 +1,9 @@
+# pcaExplorer 2.32.0
+
+## Other notes
+
+* The transition to the functions available in the `mosdef` Bioconductor is complete, with the original functions now being deprecated. This applies to `topGOtable()` (now replaced by `mosdef::run_topGO()`)
+
 # pcaExplorer 2.22.0
 
 ## Other notes
