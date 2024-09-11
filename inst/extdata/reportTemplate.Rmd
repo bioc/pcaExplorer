@@ -212,65 +212,61 @@ This gene was selected in the interactive session.
 
 ```{r}
 anno_id <- rownames(values$mydst)
-      anno_gene <- values$myannotation$gene_name
+anno_gene <- values$myannotation$gene_name
 
-      # if(is.null(input$color_by) & input$genefinder!="")
-      #   return(ggplot() + annotate("text",label="Select a factor to plot your gene",0,0) + theme_bw())
-      # if(is.null(input$color_by) & input$genefinder=="")
-      #   return(ggplot() + annotate("text",label="Select a gene and a factor to plot gene",0,0) + theme_bw())
-      # if(input$genefinder=="")
-      #   return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
-      # if(!input$genefinder %in% anno_gene & !input$genefinder %in% anno_id)
-      #   return(ggplot() + annotate("text",label="Gene not found...",0,0) + theme_bw())
+# if(is.null(input$color_by) & input$genefinder!="")
+#   return(ggplot() + annotate("text",label="Select a factor to plot your gene",0,0) + theme_bw())
+# if(is.null(input$color_by) & input$genefinder=="")
+#   return(ggplot() + annotate("text",label="Select a gene and a factor to plot gene",0,0) + theme_bw())
+# if(input$genefinder=="")
+#   return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
+# if(!input$genefinder %in% anno_gene & !input$genefinder %in% anno_id)
+#   return(ggplot() + annotate("text",label="Gene not found...",0,0) + theme_bw())
 if(input$genefinder!="") {
-
+  
   if (input$genefinder %in% anno_id) {
     selectedGene <- rownames(values$mydst)[match(input$genefinder,rownames(values$mydst))]
     selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
-    }
-    if (input$genefinder %in% anno_gene) {
+  }
+  if (input$genefinder %in% anno_gene) {
     selectedGeneSymbol <- values$myannotation$gene_name[which(values$myannotation$gene_name==input$genefinder)]
     if (length(selectedGeneSymbol) > 1) return(ggplot() + annotate("text",label=paste0("Type in a gene name/id of the following:\n",paste(selectedGene,collapse=", ")),0,0) + theme_bw())
     selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$genefinder)]
-    }
-    genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = TRUE)
-    onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
-    genedata$plotby <- interaction(onlyfactors)
-    
-    if(input$plot_style=="boxplot"){
-    res <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) +
-      geom_boxplot(outlier.shape = NA,alpha=0.7) + theme_bw()
-    if(input$ylimZero){
-      res <- res + scale_y_log10(name="Normalized counts - log10 scale",limits=c(0.4,NA))
-    } else {
-      res <- res + scale_y_log10(name="Normalized counts - log10 scale")
-    }
-    
-    res <- res +
-      labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +
-      scale_x_discrete(name="") +
-      geom_jitter(aes_string(x="plotby",y="count"),position = position_jitter(width = 0.1)) +
-      scale_fill_discrete(name="Experimental\nconditions")
-    # exportPlots$genesBoxplot <- res
-    res
-    
-    } else if(input$plot_style=="violin plot"){
-    res <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) +
-      geom_violin(aes_string(col="plotby"),alpha = 0.6) + theme_bw()
-    if(input$ylimZero){
-      res <- res + scale_y_log10(name="Normalized counts - log10 scale",limits=c(0.4,NA))
-    } else {
-      res <- res + scale_y_log10(name="Normalized counts - log10 scale")
-    }
-    
-    res <- res +
-      labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +
-      scale_x_discrete(name="") +
-      geom_jitter(aes_string(x="plotby",y="count"),alpha = 0.8,position = position_jitter(width = 0.1)) +
-      scale_fill_discrete(name="Experimental\nconditions") + scale_color_discrete(guide="none")
-    # exportPlots$genefinder <- res
-    res
   }
+  genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = TRUE)
+  onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
+  genedata$plotby <- interaction(onlyfactors)
+  
+  if (input$plot_style == "boxplot") {
+    plot_style <- "boxplot"
+  } else if (input$plot_style == "violin plot") {
+    plot_style <- "violin"
+  } else {
+    plot_style <- "auto"
+  }
+  
+  res <- mosdef::gene_plot(de_container = values$mydds,
+                           gene = selectedGene,
+                           intgroup = input$color_by,
+                           annotation_obj = values$myannotation,
+                           normalized = TRUE,
+                           labels_display = input$addsamplelabels,
+                           plot_type = plot_style)
+  
+  if (input$ylimZero) {
+    res <- res + scale_y_log10(name = "Normalized counts - log10 scale", limits = c(0.4, NA))
+  } else {
+    res <- res + scale_y_log10(name = "Normalized counts - log10 scale")
+  }
+  
+  res <- res +
+    labs(title = paste0("Normalized counts for ", selectedGeneSymbol, " - ", selectedGene)) +
+    scale_x_discrete(name = "") +
+    scale_fill_discrete(name = "Experimental\nconditions")
+  
+  exportPlots$genefinder_countsplot <- res
+  
+  res
 }
 ```
 
