@@ -21,11 +21,11 @@ geneprofiler <- function(se, genelist = NULL, intgroup = "condition", plotZ = FA
     stop("Provide at least one gene to the genelist parameter")
   # check that at least one gene is found
   genelist <- unique(genelist)
-  cat("you provided", length(genelist), "unique identifiers\n")
+  message("You provided ", length(genelist), " unique identifiers")
   inthedata <- genelist %in% rownames(se)
   if (sum(inthedata) == 0)
     stop("None of the provided genes were found in the experiment data")
-  cat(sum(inthedata), "out of", length(genelist), "provided genes were found in the data")
+  message(sum(inthedata), " out of ", length(genelist), " provided genes were found in the data")
 
   mydata <- as.data.frame(t(assay(se)[genelist, ]))
 
