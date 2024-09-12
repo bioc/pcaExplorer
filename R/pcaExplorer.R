@@ -111,7 +111,7 @@ pcaExplorer <- function(dds = NULL,
           "color_by",
           paste0("Select the group of samples to stratify the analysis. Can also assume multiple values"),
           "right", options = list(container = "body")),
-        numericInput("pca_nrgenes", label = "Nr of (most variant) genes:",
+        numericInput("pca_nrgenes", label = "Nr of (most variable) genes:",
                      value = 300, min = 50, max = 20000),
         shinyBS::bsTooltip(
           "pca_nrgenes", paste0(

@@ -128,7 +128,7 @@ the user can receive additional information on how to set the parameter, powered
 - **x-axis PC** - Select the principal component to display on the x axis
 - **y-axis PC** - Select the principal component to display on the y axis
 - **Group/color by** - Select the group of samples to stratify the analysis. Can also assume multiple values.
-- **Nr of (most variant) genes** - Number of genes to select for computing the principal components. The top n genes are
+- **Nr of (most variable) genes** - Number of genes to select for computing the principal components. The top n genes are
 selected ranked by their variance inter-samples
 - **Alpha** - Color transparency for the plots. Can assume values from 0 (transparent) to 1 (opaque)
 - **Labels size** - Size of the labels for the samples in the principal components plots
