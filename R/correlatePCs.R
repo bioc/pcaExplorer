@@ -23,7 +23,7 @@
 #' @export
 correlatePCs <- function(pcaobj, coldata, pcs = 1:4) {
   # split the analysis for continuous and categorial
-  coldataTypes <- sapply(coldata, class)
+  coldataTypes <- vapply(coldata, class, character(1))
   # extract the scores from the pc object
   x <- pcaobj$x
 
