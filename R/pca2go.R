@@ -104,7 +104,7 @@ pca2go <- function(se,
   rv <- rowVars(exprsData)
   dropped <- sum(rv == 0)
   if (dropped > 0)
-    message(paste("Dropped", dropped, "genes with 0 variance"))
+    message("Dropped ", dropped, " genes with 0 variance")
 
   exprsData <- exprsData[rv > 0, ]
 
@@ -356,7 +356,7 @@ limmaquickpca2go <- function(se,
   rv <- rowVars(exprsData)
   dropped <- sum(rv == 0)
   if (dropped > 0)
-    message(paste("Dropped", dropped, "genes with 0 variance"))
+    message("Dropped ", dropped, " genes with 0 variance")
 
   exprsData <- exprsData[rv > 0, ]
 
