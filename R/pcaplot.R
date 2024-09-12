@@ -2,11 +2,11 @@
 #'
 #' Plots the results of PCA on a 2-dimensional space
 #'
-#' @param x A \code{\link{DESeqTransform}} object, with data in \code{assay(x)},
-#' produced for example by either \code{\link{rlog}} or
-#' \code{\link{varianceStabilizingTransformation}}
+#' @param x A [DESeqTransform()] object, with data in `assay(x)`,
+#' produced for example by either [rlog()] or
+#' [varianceStabilizingTransformation()]
 #' @param intgroup Interesting groups: a character vector of
-#' names in \code{colData(x)} to use for grouping
+#' names in `colData(x)` to use for grouping
 #' @param ntop Number of top genes to use for principal components,
 #' selected by highest row variance
 #' @param returnData logical, if TRUE returns a data.frame for further use, containing the
@@ -19,7 +19,7 @@
 #' @param ellipse Logical, whether to display the confidence ellipse for the selected groups
 #' @param ellipse.prob Numeric, a value in the interval [0;1)
 #'
-#' @return An object created by \code{ggplot}, which can be assigned and further customized.
+#' @return An object created by `ggplot`, which can be assigned and further customized.
 #'
 #' @examples
 #' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3, betaSD_tissue = 1)
@@ -105,13 +105,13 @@ pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,t
 #' Produces a scree plot for investigating the proportion of explained variance, or
 #' alternatively the cumulative value
 #'
-#' @param obj A \code{prcomp} object
+#' @param obj A `prcomp` object
 #' @param type Display absolute proportions or cumulative proportion. Possible values:
 #' "pev" or "cev"
 #' @param pc_nr How many principal components to display max
 #' @param title Title of the plot
 #'
-#' @return An object created by \code{ggplot}, which can be assigned and further customized.
+#' @return An object created by `ggplot`, which can be assigned and further customized.
 #'
 #' @examples
 #' dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3, betaSD_tissue = 1)
@@ -161,11 +161,11 @@ pcascree <- function(obj, type = c("pev", "cev"),pc_nr=NULL,title=NULL)
 #'
 #' Plots the results of PCA on a 3-dimensional space, interactively
 #'
-#' @param x A \code{\link{DESeqTransform}} object, with data in \code{assay(x)},
-#' produced for example by either \code{\link{rlog}} or
-#' \code{\link{varianceStabilizingTransformation}}
+#' @param x A [DESeqTransform()] object, with data in `assay(x)`,
+#' produced for example by either [rlog()] or
+#' [varianceStabilizingTransformation()]
 #' @param intgroup Interesting groups: a character vector of
-#' names in \code{colData(x)} to use for grouping
+#' names in `colData(x)` to use for grouping
 #' @param ntop Number of top genes to use for principal components,
 #' selected by highest row variance
 #' @param returnData logical, if TRUE returns a data.frame for further use, containing the

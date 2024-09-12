@@ -1,12 +1,12 @@
 #' Get an annotation data frame from biomaRt
 #'
-#' @param dds A \code{\link{DESeqDataSet}} object
+#' @param dds A [DESeqDataSet()] object
 #' @param biomart_dataset A biomaRt dataset to use. To see the list, type
-#' \code{mart = useMart('ensembl')}, followed by \code{listDatasets(mart)}.
+#' `mart = useMart('ensembl')`, followed by `listDatasets(mart)`.
 #' @param idtype Character, the ID type of the genes as in the row names of
-#' \code{dds}, to be used for the call to \code{\link{getBM}}
+#' `dds`, to be used for the call to [getBM()]
 #'
-#' @return A data frame for ready use in \code{pcaExplorer}, retrieved from biomaRt.
+#' @return A data frame for ready use in `pcaExplorer`, retrieved from biomaRt.
 #' @export
 #'
 #' @examples
@@ -44,18 +44,18 @@ To obtain a list, type mart = useMart('ensembl'), followed by listDatasets(mart)
 
 #' Get an annotation data frame from org db packages
 #'
-#' @param dds A \code{\link{DESeqDataSet}} object
-#' @param orgdb_species Character string, named as the \code{org.XX.eg.db}
+#' @param dds A [DESeqDataSet()] object
+#' @param orgdb_species Character string, named as the `org.XX.eg.db`
 #' package which should be available in Bioconductor
 #' @param idtype Character, the ID type of the genes as in the row names of
-#' \code{dds}, to be used for the call to \code{\link{mapIds}}
+#' `dds`, to be used for the call to [mapIds()]
 #' @param key_for_genenames Character, corresponding to the column name for the 
 #' key in the orgDb package containing the official gene name (often called 
 #' gene symbol). 
 #' This parameter defaults to "SYMBOL", but can be adjusted in case the key is not
-#' found in the annotation package (e.g. for \code{org.Sc.sgd.db}).
+#' found in the annotation package (e.g. for `org.Sc.sgd.db`).
 #'
-#' @return A data frame for ready use in \code{pcaExplorer}, retrieved from the
+#' @return A data frame for ready use in `pcaExplorer`, retrieved from the
 #' org db packages
 #' @export
 #'

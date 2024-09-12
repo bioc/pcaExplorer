@@ -36,9 +36,9 @@ genespca(
 )
 }
 \arguments{
-\item{x}{A \code{\link{DESeqTransform}} object, with data in \code{assay(x)},
-produced for example by either \code{\link{rlog}} or
-\code{\link{varianceStabilizingTransformation}}}
+\item{x}{A \code{\link[=DESeqTransform]{DESeqTransform()}} object, with data in \code{assay(x)},
+produced for example by either \code{\link[=rlog]{rlog()}} or
+\code{\link[=varianceStabilizingTransformation]{varianceStabilizingTransformation()}}}
 
 \item{ntop}{Number of top genes to use for principal components,
 selected by highest row variance}
@@ -85,7 +85,7 @@ was called with scale = TRUE and when var.scale = 1)}
 \item{varname.size}{Size of the text for variable names}
 
 \item{varname.adjust}{Adjustment factor the placement of the variable names,
->= 1 means farther from the arrow}
+'>= 1' means farther from the arrow}
 
 \item{varname.abbrev}{Logical, whether or not to abbreviate the variable names}
 

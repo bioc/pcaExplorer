@@ -19,9 +19,9 @@ pcaplot(
 )
 }
 \arguments{
-\item{x}{A \code{\link{DESeqTransform}} object, with data in \code{assay(x)},
-produced for example by either \code{\link{rlog}} or
-\code{\link{varianceStabilizingTransformation}}}
+\item{x}{A \code{\link[=DESeqTransform]{DESeqTransform()}} object, with data in \code{assay(x)},
+produced for example by either \code{\link[=rlog]{rlog()}} or
+\code{\link[=varianceStabilizingTransformation]{varianceStabilizingTransformation()}}}
 
 \item{intgroup}{Interesting groups: a character vector of
 names in \code{colData(x)} to use for grouping}

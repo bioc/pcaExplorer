@@ -1,12 +1,12 @@
 #' Extract and plot the expression profile of genes
 #'
-#' @param se A \code{\link{DESeqDataSet}} object, or a
-#' \code{\link{DESeqTransform}} object.
+#' @param se A [DESeqDataSet()] object, or a
+#' [DESeqTransform()] object.
 #' @param genelist An array of characters, including the names of the genes of
 #' interest of which the profile is to be plotted
-#' @param intgroup A factor, needs to be in the \code{colnames} of \code{colData(se)}
+#' @param intgroup A factor, needs to be in the `colnames` of `colData(se)`
 #' @param plotZ Logical, whether to plot the scaled expression values. Defaults to
-#' \code{FALSE}
+#' `FALSE`
 #'
 #' @return A plot of the expression profile for the genes
 #' @export

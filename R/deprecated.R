@@ -16,7 +16,7 @@
 #' 
 #' @section Transitioning to the mosdef framework:
 #' 
-#' * [topGOtable()] is now being replaced by the more flexible 
+#' - [topGOtable()] is now being replaced by the more flexible 
 #' [mosdef::run_topGO()] function
 #' 
 #' @author Federico Marini

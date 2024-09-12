@@ -20,9 +20,9 @@ pca2go(
 )
 }
 \arguments{
-\item{se}{A \code{\link{DESeqTransform}} object, with data in \code{assay(se)},
-produced for example by either \code{\link{rlog}} or
-\code{\link{varianceStabilizingTransformation}}}
+\item{se}{A \code{\link[=DESeqTransform]{DESeqTransform()}} object, with data in \code{assay(se)},
+produced for example by either \code{\link[=rlog]{rlog()}} or
+\code{\link[=varianceStabilizingTransformation]{varianceStabilizingTransformation()}}}
 
 \item{pca_ngenes}{Number of genes to use for the PCA}
 
@@ -45,7 +45,7 @@ with the \code{annotation} provided}
 \item{return_ranked_gene_loadings}{Logical, defaults to FALSE. If TRUE, simply returns
 a list containing the top ranked genes with hi loadings in each PC and in each direction}
 
-\item{annopkg}{String containing the name of the organism annotation package. Can be used to 
+\item{annopkg}{String containing the name of the organism annotation package. Can be used to
 override the \code{organism} parameter, e.g. in case of alternative identifiers used
 in the annotation package (Arabidopsis with TAIR)}
 
@@ -54,7 +54,7 @@ in the annotation package (Arabidopsis with TAIR)}
 \value{
 A nested list object containing for each principal component the terms enriched
 in each direction. This object is to be thought in combination with the displaying feature
-of the main \code{\link{pcaExplorer}} function
+of the main \code{\link[=pcaExplorer]{pcaExplorer()}} function
 }
 \description{
 Extracts the genes with the highest loadings for each principal component, and

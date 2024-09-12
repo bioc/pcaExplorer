@@ -1,8 +1,8 @@
 #' Plot distribution of expression values
 #'
-#' @param rld A \code{\link{DESeqTransform}} object.
-#' @param plot_type Character, choose one of \code{boxplot}, \code{violin} or
-#' \code{density}. Defaults to \code{density}
+#' @param rld A [DESeqTransform()] object.
+#' @param plot_type Character, choose one of `boxplot`, `violin` or
+#' `density`. Defaults to `density`
 #'
 #' @return A plot with the distribution of the expression values
 #' @export

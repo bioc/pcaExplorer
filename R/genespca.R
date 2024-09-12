@@ -3,14 +3,14 @@
 #' Computes and plots the principal components of the genes, eventually displaying
 #' the samples as in a typical biplot visualization.
 #'
-#' The implementation of this function is based on the beautiful \code{ggbiplot}
+#' The implementation of this function is based on the beautiful `ggbiplot`
 #' package developed by Vince Vu, available at https://github.com/vqv/ggbiplot.
 #' The adaptation and additional parameters are tailored to display typical genomics data
 #' such as the transformed counts of RNA-seq experiments
 #'
-#' @param x A \code{\link{DESeqTransform}} object, with data in \code{assay(x)},
-#' produced for example by either \code{\link{rlog}} or
-#' \code{\link{varianceStabilizingTransformation}}
+#' @param x A [DESeqTransform()] object, with data in `assay(x)`,
+#' produced for example by either [rlog()] or
+#' [varianceStabilizingTransformation()]
 #' @param ntop Number of top genes to use for principal components,
 #' selected by highest row variance
 #' @param choices Vector of two numeric values, to select on which principal components to plot
@@ -37,7 +37,7 @@
 #' @param circle.prob Size of the correlation circle in Normal probability
 #' @param varname.size Size of the text for variable names
 #' @param varname.adjust  Adjustment factor the placement of the variable names,
-#'  >= 1 means farther from the arrow
+#' '>= 1' means farther from the arrow
 #' @param varname.abbrev  Logical, whether or not to abbreviate the variable names
 #' @param returnData Logical, if TRUE returns a data.frame for further use, containing the
 #' selected principal components for custom plotting
@@ -47,10 +47,10 @@
 #' to allow for distinguishing where the variables are plotted
 #' @param useRownamesAsLabels Logical, if TRUE uses the row names as labels for plotting
 #' @param point_size Size of the points to be plotted for the observations (genes)
-#' @param annotation A \code{data.frame} object, with row.names as gene identifiers (e.g. ENSEMBL ids)
-#' and a column, \code{gene_name}, containing e.g. HGNC-based gene symbols
+#' @param annotation A `data.frame` object, with row.names as gene identifiers (e.g. ENSEMBL ids)
+#' and a column, `gene_name`, containing e.g. HGNC-based gene symbols
 #'
-#' @return An object created by \code{ggplot}, which can be assigned and further customized.
+#' @return An object created by `ggplot`, which can be assigned and further customized.
 #'
 #' @examples
 #'

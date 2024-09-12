@@ -7,7 +7,7 @@
 \item{...}{Ignored arguments.}
 }
 \value{
-All functions throw a warning, with a deprecation message pointing 
+All functions throw a warning, with a deprecation message pointing
 towards its descendent (if available).
 }
 \description{
@@ -16,14 +16,15 @@ Their successors are also listed.
 }
 \details{
 The successors of these functions are likely coming after the rework that
-led to the creation of the `mosdef` package. See more into its 
+led to the creation of the \code{mosdef} package. See more into its
 documentation for more details.
 }
 \section{Transitioning to the mosdef framework}{
 
-
-* [topGOtable()] is now being replaced by the more flexible 
-[mosdef::run_topGO()] function
+\itemize{
+\item \code{\link[=topGOtable]{topGOtable()}} is now being replaced by the more flexible
+\code{\link[mosdef:run_topGO]{mosdef::run_topGO()}} function
+}
 }
 
 \examples{

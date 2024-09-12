@@ -1,11 +1,11 @@
 #' Make a simulated DESeqDataSet for two or more experimental factors
 #'
 #' Constructs a simulated dataset of Negative Binomial data from different conditions.
-#' The fold changes between the conditions can be adjusted with the \code{betaSD_condition}
-#' and the \code{betaSD_tissue} arguments.
+#' The fold changes between the conditions can be adjusted with the `betaSD_condition`
+#' and the `betaSD_tissue` arguments.
 #'
 #' This function is designed and inspired following the proposal of
-#' \code{\link{makeExampleDESeqDataSet}} from the \code{DESeq2} package. Credits are given
+#' [makeExampleDESeqDataSet()] from the `DESeq2` package. Credits are given
 #' to Mike Love for the nice initial implementation
 #'
 #' @param n number of rows (genes)
@@ -15,10 +15,10 @@
 #' @param interceptMean the mean of the intercept betas (log2 scale)
 #' @param interceptSD the standard deviation of the intercept betas (log2 scale)
 #' @param dispMeanRel a function specifying the relationship of the dispersions on
-#' \code{2^trueIntercept}
+#' `2^trueIntercept`
 #' @param sizeFactors multiplicative factors for each sample
 #'
-#' @return a \code{\link{DESeqDataSet}} with true dispersion,
+#' @return a [DESeqDataSet()] with true dispersion,
 #' intercept for two factors (condition and tissue) and beta values in the
 #'  metadata columns.  Note that the true betas are provided on the log2 scale.
 #'

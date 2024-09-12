@@ -3,8 +3,8 @@
 #' @param df A data frame, containing the (raw/normalized/transformed) counts
 #' @param log Logical, whether to convert the input values to log2 (with addition
 #' of a pseudocount). Defaults to FALSE.
-#' @param method Character string, one of \code{pearson} (default), \code{kendall}, or
-#' \code{spearman} as in \code{cor}
+#' @param method Character string, one of `pearson` (default), `kendall`, or
+#' `spearman` as in `cor`
 #' @param use_subset Logical value. If TRUE, only 1000 values per sample will be used
 #' to speed up the plotting operations.
 #'

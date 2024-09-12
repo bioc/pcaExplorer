@@ -21,7 +21,7 @@ interest}
 
 \item{topN}{Integer, number of genes with top and bottom loadings}
 
-\item{exprTable}{A \code{matrix} object, e.g. the counts of a \code{\link{DESeqDataSet}}.
+\item{exprTable}{A \code{matrix} object, e.g. the counts of a \code{\link[=DESeqDataSet]{DESeqDataSet()}}.
 If not NULL, returns the counts matrix for the selected genes}
 
 \item{annotation}{A \code{data.frame} object, with row.names as gene identifiers (e.g. ENSEMBL ids)
