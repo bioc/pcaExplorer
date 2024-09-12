@@ -4,6 +4,7 @@
 
 * The transition to the functions available in the `mosdef` Bioconductor is complete, with the original functions now being deprecated. This applies to `topGOtable()` (now replaced by `mosdef::run_topGO()`)
 * The gene plot widgets now also use the `gene_plot()` function from `mosdef`, instead of the previous undocumented internal function
+* The Roxygen-based documentation now supports markdown. No visible changes should appear to the user, as the content should have stayed fairly the same
 
 # pcaExplorer 2.22.0
 
