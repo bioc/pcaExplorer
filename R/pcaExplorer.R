@@ -1284,7 +1284,9 @@ pcaExplorer <- function(dds = NULL,
       {
         aw <- requireNamespace("airway", quietly = TRUE)
         if (aw) {
-          data(airway, package = "airway", envir = environment())
+          data_env <- new.env(parent = emptyenv())
+          data("airway", envir = data_env, package = "airway")
+          airway <- data_env[["airway"]]
 
           cm_airway <- assay(airway)
           ed_airway <- as.data.frame(colData(airway))
