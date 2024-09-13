@@ -1,10 +1,11 @@
-# pcaExplorer 2.32.0
+# pcaExplorer 2.99.0
 
 ## Other notes
 
 * The transition to the functions available in the `mosdef` Bioconductor is complete, with the original functions now being deprecated. This applies to `topGOtable()` (now replaced by `mosdef::run_topGO()`)
 * The gene plot widgets now also use the `gene_plot()` function from `mosdef`, instead of the previous undocumented internal function
 * The Roxygen-based documentation now supports markdown. No visible changes should appear to the user, as the content should have stayed fairly the same
+* Although no visible changes for the end user are expected, the incoming major version bump will reflect the change in the dependency graph, ensuring that this is noticed at least at the version numbering level
 
 # pcaExplorer 2.22.0
 
