@@ -10,8 +10,8 @@
 #' @export
 #'
 #' @examples
-#' library(airway)
-#' data(airway)
+#' library("airway")
+#' data("airway", package = "airway")
 #' airway
 #' dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
 #'                                              colData = colData(airway),
@@ -60,8 +60,8 @@ To obtain a list, type mart = useMart('ensembl'), followed by listDatasets(mart)
 #' @export
 #'
 #' @examples
-#' library(airway)
-#' data(airway)
+#' library("airway")
+#' data("airway", package = "airway")
 #' airway
 #' dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
 #'                                              colData = colData(airway),

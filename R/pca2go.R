@@ -33,9 +33,9 @@
 #' @return A table containing the computed GO Terms and related enrichment scores
 #'
 #' @examples
-#' library(airway)
-#' library(DESeq2)
-#' data(airway)
+#' library("airway")
+#' library("DESeq2")
+#' data("airway", package = "airway")
 #' airway
 #' dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
 #' # Example, performing extraction of enriched functional categories in
@@ -145,9 +145,9 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
 #' of the main [pcaExplorer()] function
 #'
 #' @examples
-#' library(airway)
-#' library(DESeq2)
-#' data(airway)
+#' library("airway")
+#' library("DESeq2")
+#' data("airway", package = "airway")
 #' airway
 #' dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
 #' \dontrun{
@@ -310,10 +310,10 @@ rankedGeneLoadings <- function(x, pc = 1, decreasing = TRUE) {
 #' of the main [pcaExplorer()] function
 #'
 #' @examples
-#' library(airway)
-#' library(DESeq2)
-#' library(limma)
-#' data(airway)
+#' library("airway")
+#' library("DESeq2")
+#' library("limma")
+#' data("airway", package = "airway")
 #' airway
 #' dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
 #' \dontrun{

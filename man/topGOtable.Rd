@@ -71,9 +71,9 @@ following: \code{elim}, \code{weight}, \code{weight01}, \code{lea},
 documentation of the \code{topGO} package itself
 }
 \examples{
-library(airway)
-library(DESeq2)
-data(airway)
+library("airway")
+library("DESeq2")
+data("airway", package = "airway")
 airway
 dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
 # Example, performing extraction of enriched functional categories in

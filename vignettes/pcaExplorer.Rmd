@@ -384,10 +384,10 @@ Otherwise, to run `r Biocpkg("pcaExplorer")` on this dataset from the terminal/R
 First, prepare the objects to be passed as parameters of `r Biocpkg("pcaExplorer")`.
 
 ```{r loadairway, message=FALSE}
-library(airway)
-library(DESeq2)
+library("airway")
+library("DESeq2")
 
-data(airway)
+data("airway", package = "airway")
 
 dds_airway <- DESeqDataSet(airway,design= ~ cell + dex)
 dds_airway

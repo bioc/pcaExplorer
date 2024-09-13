@@ -12,8 +12,8 @@
 #' @export
 #'
 #' @examples
-#' library(airway)
-#' data(airway)
+#' library("airway")
+#' data("airway", package = "airway")
 #' airway
 #' dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
 #'                                              colData = colData(airway),

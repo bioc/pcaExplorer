@@ -48,8 +48,8 @@ Launch a Shiny App for interactive exploration of a dataset from the perspective
 of Principal Components Analysis
 }
 \examples{
-library(airway)
-data(airway)
+library("airway")
+data("airway", package = "airway")
 airway
 dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
                                              colData = colData(airway),

@@ -279,9 +279,9 @@ count quantifications can be found in the `airway` package vignette.
 To run `pcaExplorer` on this dataset, the following commands are required
 
 ```
-library(airway)
+library("airway"")
 
-data(airway)
+data("airway", package = "airway")
 
 dds_airway <- DESeqDataSet(airway,design=~dex+cell)
 dds_airway
@@ -293,7 +293,7 @@ pcaExplorer(dds = dds_airway,
 The `annotation` for this dataset can be built by exploiting the `org.Hs.eg.db` package
 
 ```
-library(org.Hs.eg.db)
+library("org.Hs.eg.db")
 genenames_airway <- mapIds(org.Hs.eg.db,keys = rownames(dds_airway),column = "SYMBOL",keytype="ENSEMBL")
 annotation_airway <- data.frame(gene_name = genenames_airway,
                                 row.names = rownames(dds_airway),

@@ -62,9 +62,9 @@ performs functional enrichment analysis on them using routines and algorithms fr
 the \code{topGO} package
 }
 \examples{
-library(airway)
-library(DESeq2)
-data(airway)
+library("airway")
+library("DESeq2")
+data("airway", package = "airway")
 airway
 dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
 \dontrun{

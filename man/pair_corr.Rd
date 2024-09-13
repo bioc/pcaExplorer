@@ -25,8 +25,8 @@ A plot with pairwise scatter plots and correlation coefficients
 Pairwise scatter and correlation plot of counts
 }
 \examples{
-library(airway)
-data(airway)
+library("airway")
+data("airway", package = "airway")
 airway
 dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
                                              colData = colData(airway),

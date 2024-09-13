@@ -48,10 +48,10 @@ performs functional enrichment analysis on them using the simple and quick routi
 provided by the \code{limma} package
 }
 \examples{
-library(airway)
-library(DESeq2)
-library(limma)
-data(airway)
+library("airway")
+library("DESeq2")
+library("limma")
+data("airway", package = "airway")
 airway
 dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
 \dontrun{
