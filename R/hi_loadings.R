@@ -1,16 +1,16 @@
 #' Extract genes with highest loadings
 #'
-#' @param pcaobj A \code{prcomp} object
+#' @param pcaobj A `prcomp` object
 #' @param whichpc An integer number, corresponding to the principal component of
 #' interest
 #' @param topN Integer, number of genes with top and bottom loadings
-#' @param exprTable A \code{matrix} object, e.g. the counts of a \code{\link{DESeqDataSet}}.
+#' @param exprTable A `matrix` object, e.g. the counts of a [DESeqDataSet()].
 #' If not NULL, returns the counts matrix for the selected genes
-#' @param annotation A \code{data.frame} object, with row.names as gene identifiers (e.g. ENSEMBL ids)
-#' and a column, \code{gene_name}, containing e.g. HGNC-based gene symbols
+#' @param annotation A `data.frame` object, with row.names as gene identifiers (e.g. ENSEMBL ids)
+#' and a column, `gene_name`, containing e.g. HGNC-based gene symbols
 #' @param title The title of the plot
 #'
-#' @return A ggplot2 object, or a \code{matrix}, if \code{exprTable} is not null
+#' @return A ggplot2 object, or a `matrix`, if `exprTable` is not null
 #'
 #' @examples
 #' dds <- makeExampleDESeqDataSet_multifac(betaSD = 3, betaSD_tissue = 1)

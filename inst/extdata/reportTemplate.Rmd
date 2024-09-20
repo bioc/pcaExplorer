@@ -111,15 +111,15 @@ cat("Counts are ranging from", min(counts(values$mydds)),"to",max(counts(values$
 
 # PCA on the samples
 
-This plot shows how the samples are related to each other by plotting PC `r input$pc_x` vs PC `r input$pc_y`, using the top `r input$pca_nrgenes` most variant genes
+This plot shows how the samples are related to each other by plotting PC `r input$pc_x` vs PC `r input$pc_y`, using the top `r input$pca_nrgenes` most variable genes
 
 ```{r}
 res <- pcaplot(values$mydst,intgroup = input$color_by,ntop = input$pca_nrgenes,
-                     pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),
-                     text_labels = input$sample_labels,
-                     point_size = input$pca_point_size, title="Samples PCA - zoom in",
-                     ellipse = input$pca_ellipse, ellipse.prob = input$pca_cislider
-      )
+               pcX = as.integer(input$pc_x),pcY = as.integer(input$pc_y),
+               text_labels = input$sample_labels,
+               point_size = input$pca_point_size, title="Samples PCA - zoom in",
+               ellipse = input$pca_ellipse, ellipse.prob = input$pca_cislider
+)
 res <- res + theme_bw()
 res
 ```
@@ -154,14 +154,14 @@ This plot illustrates how the top `r input$pca_nrgenes` variant genes are distri
 
 ```{r}
 if(!is.null(input$color_by)) {
-        expgroups <- as.data.frame(colData(values$mydst)[,input$color_by])
-        expgroups <- interaction(expgroups)
-        expgroups <- factor(expgroups,levels=unique(expgroups))
-
-      } else {
-        expgroups <- colnames(values$mydst)
-      }
-      colGroups <- colSel()[factor(expgroups)]
+  expgroups <- as.data.frame(colData(values$mydst)[,input$color_by])
+  expgroups <- interaction(expgroups)
+  expgroups <- factor(expgroups,levels=unique(expgroups))
+  
+} else {
+  expgroups <- colnames(values$mydst)
+}
+colGroups <- colSel()[factor(expgroups)]
 
 res <- genespca(values$mydst,
                 ntop = input$pca_nrgenes,
@@ -180,10 +180,10 @@ For the selected genes, this is the overall profile across all samples
 
 ```{r}
 if(!is.null(input$pcagenes_brush) & length(input$color_by)>0)
-      geneprofiler(values$mydst,
-                   genelist = curData_brush()$ids,
-                   intgroup = input$color_by,
-                   plotZ = input$zprofile)
+  geneprofiler(values$mydst,
+               genelist = curData_brush()$ids,
+               intgroup = input$color_by,
+               plotZ = input$zprofile)
 ```
 
 And here is an interactive heatmap for that subset
@@ -197,9 +197,9 @@ if(!is.null(input$pcagenes_brush))
     selectedGenes <- brushedObject$ids
     toplot <- assay(values$mydst)[selectedGenes,]
     rownames(toplot) <- values$myannotation$gene_name[match(rownames(toplot),rownames(values$myannotation))]
-  
+    
     mycolss <- c("#313695","#4575b4","#74add1","#abd9e9","#e0f3f8","#fee090","#fdae61","#f46d43","#d73027","#a50026") # to be consistent with red/blue usual coding
-  
+    
     heatmaply(toplot,Colv = as.logical(input$heatmap_colv),colors = mycolss)
   }
 }
@@ -212,65 +212,61 @@ This gene was selected in the interactive session.
 
 ```{r}
 anno_id <- rownames(values$mydst)
-      anno_gene <- values$myannotation$gene_name
+anno_gene <- values$myannotation$gene_name
 
-      # if(is.null(input$color_by) & input$genefinder!="")
-      #   return(ggplot() + annotate("text",label="Select a factor to plot your gene",0,0) + theme_bw())
-      # if(is.null(input$color_by) & input$genefinder=="")
-      #   return(ggplot() + annotate("text",label="Select a gene and a factor to plot gene",0,0) + theme_bw())
-      # if(input$genefinder=="")
-      #   return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
-      # if(!input$genefinder %in% anno_gene & !input$genefinder %in% anno_id)
-      #   return(ggplot() + annotate("text",label="Gene not found...",0,0) + theme_bw())
+# if(is.null(input$color_by) & input$genefinder!="")
+#   return(ggplot() + annotate("text",label="Select a factor to plot your gene",0,0) + theme_bw())
+# if(is.null(input$color_by) & input$genefinder=="")
+#   return(ggplot() + annotate("text",label="Select a gene and a factor to plot gene",0,0) + theme_bw())
+# if(input$genefinder=="")
+#   return(ggplot() + annotate("text",label="Type in a gene name/id",0,0) + theme_bw())
+# if(!input$genefinder %in% anno_gene & !input$genefinder %in% anno_id)
+#   return(ggplot() + annotate("text",label="Gene not found...",0,0) + theme_bw())
 if(input$genefinder!="") {
-
+  
   if (input$genefinder %in% anno_id) {
     selectedGene <- rownames(values$mydst)[match(input$genefinder,rownames(values$mydst))]
     selectedGeneSymbol <- values$myannotation$gene_name[match(selectedGene,rownames(values$myannotation))]
-    }
-    if (input$genefinder %in% anno_gene) {
+  }
+  if (input$genefinder %in% anno_gene) {
     selectedGeneSymbol <- values$myannotation$gene_name[which(values$myannotation$gene_name==input$genefinder)]
     if (length(selectedGeneSymbol) > 1) return(ggplot() + annotate("text",label=paste0("Type in a gene name/id of the following:\n",paste(selectedGene,collapse=", ")),0,0) + theme_bw())
     selectedGene <- rownames(values$myannotation)[which(values$myannotation$gene_name==input$genefinder)]
-    }
-    genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = TRUE)
-    onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
-    genedata$plotby <- interaction(onlyfactors)
-    
-    if(input$plot_style=="boxplot"){
-    res <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) +
-      geom_boxplot(outlier.shape = NA,alpha=0.7) + theme_bw()
-    if(input$ylimZero){
-      res <- res + scale_y_log10(name="Normalized counts - log10 scale",limits=c(0.4,NA))
-    } else {
-      res <- res + scale_y_log10(name="Normalized counts - log10 scale")
-    }
-    
-    res <- res +
-      labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +
-      scale_x_discrete(name="") +
-      geom_jitter(aes_string(x="plotby",y="count"),position = position_jitter(width = 0.1)) +
-      scale_fill_discrete(name="Experimental\nconditions")
-    # exportPlots$genesBoxplot <- res
-    res
-    
-    } else if(input$plot_style=="violin plot"){
-    res <- ggplot(genedata,aes_string(x="plotby",y="count",fill="plotby")) +
-      geom_violin(aes_string(col="plotby"),alpha = 0.6) + theme_bw()
-    if(input$ylimZero){
-      res <- res + scale_y_log10(name="Normalized counts - log10 scale",limits=c(0.4,NA))
-    } else {
-      res <- res + scale_y_log10(name="Normalized counts - log10 scale")
-    }
-    
-    res <- res +
-      labs(title=paste0("Normalized counts for ",selectedGeneSymbol," - ",selectedGene)) +
-      scale_x_discrete(name="") +
-      geom_jitter(aes_string(x="plotby",y="count"),alpha = 0.8,position = position_jitter(width = 0.1)) +
-      scale_fill_discrete(name="Experimental\nconditions") + scale_color_discrete(guide="none")
-    # exportPlots$genefinder <- res
-    res
   }
+  genedata <- plotCounts(values$mydds,gene=selectedGene,intgroup = input$color_by,returnData = TRUE)
+  onlyfactors <- genedata[,match(input$color_by,colnames(genedata))]
+  genedata$plotby <- interaction(onlyfactors)
+  
+  if (input$plot_style == "boxplot") {
+    plot_style <- "boxplot"
+  } else if (input$plot_style == "violin plot") {
+    plot_style <- "violin"
+  } else {
+    plot_style <- "auto"
+  }
+  
+  res <- mosdef::gene_plot(de_container = values$mydds,
+                           gene = selectedGene,
+                           intgroup = input$color_by,
+                           annotation_obj = values$myannotation,
+                           normalized = TRUE,
+                           labels_display = input$addsamplelabels,
+                           plot_type = plot_style)
+  
+  if (input$ylimZero) {
+    res <- res + scale_y_log10(name = "Normalized counts - log10 scale", limits = c(0.4, NA))
+  } else {
+    res <- res + scale_y_log10(name = "Normalized counts - log10 scale")
+  }
+  
+  res <- res +
+    labs(title = paste0("Normalized counts for ", selectedGeneSymbol, " - ", selectedGene)) +
+    scale_x_discrete(name = "") +
+    scale_fill_discrete(name = "Experimental\nconditions")
+  
+  exportPlots$genefinder_countsplot <- res
+  
+  res
 }
 ```
 
@@ -315,23 +311,23 @@ if(input$composemat > 0){
   tcol <- obj3()[[2]]
   tcol2 <- obj3()[[3]]
   pres <- prcomp(t(pcmat),scale=FALSE)
-
+  
   plot.index <- c(as.integer(input$pc_x_multifac),as.integer(input$pc_y_multifac))
   offset <- ncol(pcmat)/2
   gene.no <- offset
   pcx <- pres$x
   # set.seed(11)
-    # for (i in 1:ncol(pcx)) {
-    #   pcx[,i] <- pcx[,i] + rnorm(nrow(pcx),sd=diff(range(pcx[,i]))/100)
-    # }
-    plot(pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no],xlim=range(pcx[,plot.index[1]]),ylim=range(pcx[,plot.index[2]]),pch=20,col=tcol,cex=0.3)#,type="n")
-    #plot(0,type="n",xlim=range(pres$x[,plot.index]),ylim=range(pres$x[,plot.index]))
-    lcol <- ifelse(tcol != tcol2,"black","grey")
-    for (i in 1:gene.no) {
-      lines(pcx[c(i,offset+i),plot.index[1]],pcx[c(i,offset+i),plot.index[2]],col=lcol[i])
-    }
-    points(pcx[1:offset,plot.index[1]][1:gene.no],pcx[1:offset,plot.index[2]][1:gene.no],pch=20,col=tcol,cex=0.3)
-    points(pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no],pch=20,col=tcol2,cex=0.3)}
+  # for (i in 1:ncol(pcx)) {
+  #   pcx[,i] <- pcx[,i] + rnorm(nrow(pcx),sd=diff(range(pcx[,i]))/100)
+  # }
+  plot(pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no],xlim=range(pcx[,plot.index[1]]),ylim=range(pcx[,plot.index[2]]),pch=20,col=tcol,cex=0.3)#,type="n")
+  #plot(0,type="n",xlim=range(pres$x[,plot.index]),ylim=range(pres$x[,plot.index]))
+  lcol <- ifelse(tcol != tcol2,"black","grey")
+  for (i in 1:gene.no) {
+    lines(pcx[c(i,offset+i),plot.index[1]],pcx[c(i,offset+i),plot.index[2]],col=lcol[i])
+  }
+  points(pcx[1:offset,plot.index[1]][1:gene.no],pcx[1:offset,plot.index[2]][1:gene.no],pch=20,col=tcol,cex=0.3)
+  points(pcx[(offset+1):ncol(pcmat),plot.index[1]][1:gene.no],pcx[(offset+1):ncol(pcmat),plot.index[2]][1:gene.no],pch=20,col=tcol2,cex=0.3)}
 ```
 
 # About pcaExplorer

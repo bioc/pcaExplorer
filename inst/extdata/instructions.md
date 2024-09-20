@@ -128,7 +128,7 @@ the user can receive additional information on how to set the parameter, powered
 - **x-axis PC** - Select the principal component to display on the x axis
 - **y-axis PC** - Select the principal component to display on the y axis
 - **Group/color by** - Select the group of samples to stratify the analysis. Can also assume multiple values.
-- **Nr of (most variant) genes** - Number of genes to select for computing the principal components. The top n genes are
+- **Nr of (most variable) genes** - Number of genes to select for computing the principal components. The top n genes are
 selected ranked by their variance inter-samples
 - **Alpha** - Color transparency for the plots. Can assume values from 0 (transparent) to 1 (opaque)
 - **Labels size** - Size of the labels for the samples in the principal components plots
@@ -279,9 +279,9 @@ count quantifications can be found in the `airway` package vignette.
 To run `pcaExplorer` on this dataset, the following commands are required
 
 ```
-library(airway)
+library("airway"")
 
-data(airway)
+data("airway", package = "airway")
 
 dds_airway <- DESeqDataSet(airway,design=~dex+cell)
 dds_airway
@@ -293,7 +293,7 @@ pcaExplorer(dds = dds_airway,
 The `annotation` for this dataset can be built by exploiting the `org.Hs.eg.db` package
 
 ```
-library(org.Hs.eg.db)
+library("org.Hs.eg.db")
 genenames_airway <- mapIds(org.Hs.eg.db,keys = rownames(dds_airway),column = "SYMBOL",keytype="ENSEMBL")
 annotation_airway <- data.frame(gene_name = genenames_airway,
                                 row.names = rownames(dds_airway),

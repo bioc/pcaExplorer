@@ -53,8 +53,8 @@
   pkgVersion <- packageDescription("pcaExplorer", fields = "Version")
   msg <- paste0("Welcome to pcaExplorer v", pkgVersion, "\n\n")
   citation <- paste0("If you use pcaExplorer in your work, please cite:\n\n",
-                     "Federico Marini, Harald Binder\n",
                      "pcaExplorer: an R/Bioconductor package for interacting with RNA-seq principal components\n",
+                     "Federico Marini, Harald Binder\n",
                      "BMC Bioinformatics, 2019 - https://doi.org/10.1186/s12859-019-2879-1\n")
   packageStartupMessage(paste0(msg, citation))
 }

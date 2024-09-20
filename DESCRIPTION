@@ -1,8 +1,8 @@
 Package: pcaExplorer
 Type: Package
 Title: Interactive Visualization of RNA-seq Data Using a Principal Components Approach
-Version: 2.31.0
-Date: 2024-04-07
+Version: 2.99.0
+Date: 2024-09-13
 Authors@R: c(person("Federico", "Marini", role = c("aut", "cre"), 
     email ="marinif@uni-mainz.de", 
     comment = c(ORCID = '0000-0003-3252-7758')))
@@ -11,10 +11,10 @@ Description: This package provides functionality for interactive visualization
     allow for quick information extraction and effective data exploration. A Shiny
     application encapsulates the whole analysis.
 License: MIT + file LICENSE
-LazyData: TRUE
 Imports: 
     DESeq2, 
     SummarizedExperiment, 
+    mosdef (>= 1.1.0),
     GenomicRanges, 
     IRanges,
     S4Vectors, 
@@ -58,6 +58,7 @@ BugReports: https://github.com/federicomarini/pcaExplorer/issues
 biocViews: ImmunoOncology, Visualization, RNASeq, DimensionReduction,
     PrincipalComponent, QualityControl, GUI, ReportWriting, ShinyApps
 VignetteBuilder: knitr
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Encoding: UTF-8
 NeedsCompilation: no
+Roxygen: list(markdown = TRUE)

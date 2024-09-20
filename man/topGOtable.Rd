@@ -53,7 +53,7 @@ topGOtable(
 \item{topGO_method2}{Character, specifying which of the methods implemented by \code{topGO} should be used, in addition to the \code{classic} algorithm. Defaults to \code{elim}}
 
 \item{do_padj}{Logical, whether to perform the adjustment on the p-values from the specific
-topGO method, based on the FDR correction. Defaults to FALSE, since the assumption of 
+topGO method, based on the FDR correction. Defaults to FALSE, since the assumption of
 independent hypotheses is somewhat violated by the intrinsic DAG-structure of the Gene
 Ontology Terms}
 }
@@ -66,14 +66,14 @@ the algorithm and the implementation in the topGO package
 }
 \details{
 Allowed values assumed by the \code{topGO_method2} parameter are one of the
-following: \code{elim}, \code{weight}, \code{weight01}, \code{lea}, 
-\code{parentchild}. For more details on this, please refer to the original 
+following: \code{elim}, \code{weight}, \code{weight01}, \code{lea},
+\code{parentchild}. For more details on this, please refer to the original
 documentation of the \code{topGO} package itself
 }
 \examples{
-library(airway)
-library(DESeq2)
-data(airway)
+library("airway")
+library("DESeq2")
+data("airway", package = "airway")
 airway
 dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
 # Example, performing extraction of enriched functional categories in

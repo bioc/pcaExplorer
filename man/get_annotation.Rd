@@ -7,13 +7,13 @@
 get_annotation(dds, biomart_dataset, idtype)
 }
 \arguments{
-\item{dds}{A \code{\link{DESeqDataSet}} object}
+\item{dds}{A \code{\link[=DESeqDataSet]{DESeqDataSet()}} object}
 
 \item{biomart_dataset}{A biomaRt dataset to use. To see the list, type
 \code{mart = useMart('ensembl')}, followed by \code{listDatasets(mart)}.}
 
 \item{idtype}{Character, the ID type of the genes as in the row names of
-\code{dds}, to be used for the call to \code{\link{getBM}}}
+\code{dds}, to be used for the call to \code{\link[=getBM]{getBM()}}}
 }
 \value{
 A data frame for ready use in \code{pcaExplorer}, retrieved from biomaRt.
@@ -22,8 +22,8 @@ A data frame for ready use in \code{pcaExplorer}, retrieved from biomaRt.
 Get an annotation data frame from biomaRt
 }
 \examples{
-library(airway)
-data(airway)
+library("airway")
+data("airway", package = "airway")
 airway
 dds_airway <- DESeq2::DESeqDataSetFromMatrix(assay(airway),
                                              colData = colData(airway),

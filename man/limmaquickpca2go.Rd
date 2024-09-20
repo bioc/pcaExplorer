@@ -17,9 +17,9 @@ limmaquickpca2go(
 )
 }
 \arguments{
-\item{se}{A \code{\link{DESeqTransform}} object, with data in \code{assay(se)},
-produced for example by either \code{\link{rlog}} or
-\code{\link{varianceStabilizingTransformation}}}
+\item{se}{A \code{\link[=DESeqTransform]{DESeqTransform()}} object, with data in \code{assay(se)},
+produced for example by either \code{\link[=rlog]{rlog()}} or
+\code{\link[=varianceStabilizingTransformation]{varianceStabilizingTransformation()}}}
 
 \item{pca_ngenes}{Number of genes to use for the PCA}
 
@@ -40,7 +40,7 @@ like it is normally used with the \code{select} function of \code{AnnotationDbi}
 \value{
 A nested list object containing for each principal component the terms enriched
 in each direction. This object is to be thought in combination with the displaying feature
-of the main \code{\link{pcaExplorer}} function
+of the main \code{\link[=pcaExplorer]{pcaExplorer()}} function
 }
 \description{
 Extracts the genes with the highest loadings for each principal component, and
@@ -48,10 +48,10 @@ performs functional enrichment analysis on them using the simple and quick routi
 provided by the \code{limma} package
 }
 \examples{
-library(airway)
-library(DESeq2)
-library(limma)
-data(airway)
+library("airway")
+library("DESeq2")
+library("limma")
+data("airway", package = "airway")
 airway
 dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
 \dontrun{

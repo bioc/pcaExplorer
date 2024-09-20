@@ -1,12 +1,12 @@
 #' Extract and plot the expression profile of genes
 #'
-#' @param se A \code{\link{DESeqDataSet}} object, or a
-#' \code{\link{DESeqTransform}} object.
+#' @param se A [DESeqDataSet()] object, or a
+#' [DESeqTransform()] object.
 #' @param genelist An array of characters, including the names of the genes of
 #' interest of which the profile is to be plotted
-#' @param intgroup A factor, needs to be in the \code{colnames} of \code{colData(se)}
+#' @param intgroup A factor, needs to be in the `colnames` of `colData(se)`
 #' @param plotZ Logical, whether to plot the scaled expression values. Defaults to
-#' \code{FALSE}
+#' `FALSE`
 #'
 #' @return A plot of the expression profile for the genes
 #' @export
@@ -21,11 +21,11 @@ geneprofiler <- function(se, genelist = NULL, intgroup = "condition", plotZ = FA
     stop("Provide at least one gene to the genelist parameter")
   # check that at least one gene is found
   genelist <- unique(genelist)
-  cat("you provided", length(genelist), "unique identifiers\n")
+  message("You provided ", length(genelist), " unique identifiers")
   inthedata <- genelist %in% rownames(se)
   if (sum(inthedata) == 0)
     stop("None of the provided genes were found in the experiment data")
-  cat(sum(inthedata), "out of", length(genelist), "provided genes were found in the data")
+  message(sum(inthedata), " out of ", length(genelist), " provided genes were found in the data")
 
   mydata <- as.data.frame(t(assay(se)[genelist, ]))
 

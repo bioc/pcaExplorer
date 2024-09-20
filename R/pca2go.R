@@ -1,37 +1,153 @@
+#' Extract functional terms enriched in the DE genes, based on topGO
+#'
+#' A wrapper for extracting functional GO terms enriched in the DE genes, based on
+#' the algorithm and the implementation in the topGO package
+#' 
+#' Allowed values assumed by the `topGO_method2` parameter are one of the
+#' following: `elim`, `weight`, `weight01`, `lea`, 
+#' `parentchild`. For more details on this, please refer to the original 
+#' documentation of the `topGO` package itself
+#'
+#' @param DEgenes A vector of (differentially expressed) genes
+#' @param BGgenes A vector of background genes, e.g. all (expressed) genes in the assays
+#' @param ontology Which Gene Ontology domain to analyze: `BP` (Biological Process), `MF` (Molecular Function), or `CC` (Cellular Component)
+#' @param annot Which function to use for annotating genes to GO terms. Defaults to `annFUN.org`
+#' @param mapping Which `org.XX.eg.db` to use for annotation - select according to the species
+#' @param geneID Which format the genes are provided. Defaults to `symbol`, could also be
+#' `entrez` or `ENSEMBL`
+#' @param topTablerows How many rows to report before any filtering
+#' @param fullNamesInRows Logical, whether to display or not the full names for the GO terms
+#' @param addGeneToTerms Logical, whether to add a column with all genes annotated to each GO term
+#' @param plotGraph Logical, if TRUE additionally plots a graph on the identified GO terms
+#' @param plotNodes Number of nodes to plot
+#' @param writeOutput Logical, if TRUE additionally writes out the result to a file
+#' @param outputFile Name of the file the result should be written into
+#' @param topGO_method2 Character, specifying which of the methods implemented by `topGO` should be used, in addition to the `classic` algorithm. Defaults to `elim`
+#' @param do_padj Logical, whether to perform the adjustment on the p-values from the specific
+#' topGO method, based on the FDR correction. Defaults to FALSE, since the assumption of 
+#' independent hypotheses is somewhat violated by the intrinsic DAG-structure of the Gene
+#' Ontology Terms
+#'
+#' @import topGO
+#'
+#' @return A table containing the computed GO Terms and related enrichment scores
+#'
+#' @examples
+#' library("airway")
+#' library("DESeq2")
+#' data("airway", package = "airway")
+#' airway
+#' dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
+#' # Example, performing extraction of enriched functional categories in
+#' # detected significantly expressed genes
+#' \dontrun{
+#' dds_airway <- DESeq(dds_airway)
+#' res_airway <- results(dds_airway)
+#' library("AnnotationDbi")
+#' library("org.Hs.eg.db")
+#' res_airway$symbol <- mapIds(org.Hs.eg.db,
+#'                             keys = row.names(res_airway),
+#'                             column = "SYMBOL",
+#'                             keytype = "ENSEMBL",
+#'                             multiVals = "first")
+#' res_airway$entrez <- mapIds(org.Hs.eg.db,
+#'                             keys = row.names(res_airway),
+#'                             column = "ENTREZID",
+#'                             keytype = "ENSEMBL",
+#'                             multiVals = "first")
+#' resOrdered <- as.data.frame(res_airway[order(res_airway$padj),])
+#' de_df <- resOrdered[resOrdered$padj < .05 & !is.na(resOrdered$padj),]
+#' de_symbols <- de_df$symbol
+#' bg_ids <- rownames(dds_airway)[rowSums(counts(dds_airway)) > 0]
+#' bg_symbols <- mapIds(org.Hs.eg.db,
+#'                      keys = bg_ids,
+#'                      column = "SYMBOL",
+#'                      keytype = "ENSEMBL",
+#'                      multiVals = "first")
+#' library(topGO)
+#' topgoDE_airway <- topGOtable(de_symbols, bg_symbols,
+#'                              ontology = "BP",
+#'                              mapping = "org.Hs.eg.db",
+#'                              geneID = "symbol")
+#' }
+#' 
+#' @importFrom mosdef run_topGO
+#'
+#' @export
+topGOtable <- function(DEgenes,                  # Differentially expressed genes
+                       BGgenes,                 # background genes
+                       ontology = "BP",            # could use also "MF"
+                       annot = annFUN.org,       # parameters for creating topGO object
+                       mapping = "org.Mm.eg.db",
+                       geneID = "symbol",       # could also beID = "entrez"
+                       topTablerows = 200,
+                       fullNamesInRows = TRUE,
+                       addGeneToTerms = TRUE,
+                       plotGraph = FALSE, 
+                       plotNodes = 10,
+                       writeOutput = FALSE, 
+                       outputFile = "",
+                       topGO_method2 = "elim",
+                       do_padj = FALSE) {
+  
+  .Deprecated(old = "topGOtable", new = "mosdef::run_topGO", 
+              msg = paste0(
+                "Please use `mosdef::run_topGO()` in replacement of the `topGOtable()` function, ",
+                "originally located in the pcaExplorer package. \nCheck the manual page for ",
+                "`?mosdef::run_topGO()` to see the details on how to use it, e.g. ",
+                "refer to the new parameter definition and naming"))
+  
+  res_enrich <- mosdef::run_topGO(
+    de_genes = DEgenes,
+    bg_genes = BGgenes,
+    annot = annot,
+    ontology = ontology,
+    mapping = mapping,
+    gene_id = geneID,
+    full_names_in_rows = fullNamesInRows,
+    add_gene_to_terms = addGeneToTerms,
+    topGO_method2 = topGO_method2,
+    do_padj = do_padj,
+    verbose = TRUE
+  )
+  
+  return(res_enrich)
+}
+
 #' Functional interpretation of the principal components
 #'
 #' Extracts the genes with the highest loadings for each principal component, and
 #' performs functional enrichment analysis on them using routines and algorithms from
-#' the \code{topGO} package
+#' the `topGO` package
 #'
-#' @param se A \code{\link{DESeqTransform}} object, with data in \code{assay(se)},
-#' produced for example by either \code{\link{rlog}} or
-#' \code{\link{varianceStabilizingTransformation}}
+#' @param se A [DESeqTransform()] object, with data in `assay(se)`,
+#' produced for example by either [rlog()] or
+#' [varianceStabilizingTransformation()]
 #' @param pca_ngenes Number of genes to use for the PCA
-#' @param annotation A \code{data.frame} object, with row.names as gene identifiers (e.g. ENSEMBL ids)
-#' and a column, \code{gene_name}, containing e.g. HGNC-based gene symbols
-#' @param inputType Input format type of the gene identifiers. Will be used by the routines of \code{topGO}
-#' @param organism Character abbreviation for the species, using \code{org.XX.eg.db} for annotation
+#' @param annotation A `data.frame` object, with row.names as gene identifiers (e.g. ENSEMBL ids)
+#' and a column, `gene_name`, containing e.g. HGNC-based gene symbols
+#' @param inputType Input format type of the gene identifiers. Will be used by the routines of `topGO`
+#' @param organism Character abbreviation for the species, using `org.XX.eg.db` for annotation
 #' @param ensToGeneSymbol Logical, whether to expect ENSEMBL gene identifiers, to convert to gene symbols
-#' with the \code{annotation} provided
+#' with the `annotation` provided
 #' @param loadings_ngenes Number of genes to extract the loadings (in each direction)
 #' @param background_genes Which genes to consider as background.
 #' @param scale Logical, defaults to FALSE, scale values for the PCA
 #' @param return_ranked_gene_loadings Logical, defaults to FALSE. If TRUE, simply returns
 #' a list containing the top ranked genes with hi loadings in each PC and in each direction
 #' @param annopkg String containing the name of the organism annotation package. Can be used to 
-#' override the \code{organism} parameter, e.g. in case of alternative identifiers used
+#' override the `organism` parameter, e.g. in case of alternative identifiers used
 #' in the annotation package (Arabidopsis with TAIR)
 #' @param ... Further parameters to be passed to the topGO routine
 #'
 #' @return A nested list object containing for each principal component the terms enriched
 #' in each direction. This object is to be thought in combination with the displaying feature
-#' of the main \code{\link{pcaExplorer}} function
+#' of the main [pcaExplorer()] function
 #'
 #' @examples
-#' library(airway)
-#' library(DESeq2)
-#' data(airway)
+#' library("airway")
+#' library("DESeq2")
+#' data("airway", package = "airway")
 #' airway
 #' dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
 #' \dontrun{
@@ -104,7 +220,7 @@ pca2go <- function(se,
   rv <- rowVars(exprsData)
   dropped <- sum(rv == 0)
   if (dropped > 0)
-    message(paste("Dropped", dropped, "genes with 0 variance"))
+    message("Dropped ", dropped, " genes with 0 variance")
 
   exprsData <- exprsData[rv > 0, ]
 
@@ -133,14 +249,22 @@ pca2go <- function(se,
   
   message("Ranking genes by the loadings ... done!")
   message("Extracting functional categories enriched in the gene subsets ...")
-  topGOpc1pos <- topGOtable(probesPC1pos, BGids, annot = annFUN.org, mapping = annopkg, ...)
-  topGOpc1neg <- topGOtable(probesPC1neg, BGids, annot = annFUN.org, mapping = annopkg, ...)
-  topGOpc2pos <- topGOtable(probesPC2pos, BGids, annot = annFUN.org, mapping = annopkg, ...)
-  topGOpc2neg <- topGOtable(probesPC2neg, BGids, annot = annFUN.org, mapping = annopkg, ...)
-  topGOpc3pos <- topGOtable(probesPC3pos, BGids, annot = annFUN.org, mapping = annopkg, ...)
-  topGOpc3neg <- topGOtable(probesPC3neg, BGids, annot = annFUN.org, mapping = annopkg, ...)
-  topGOpc4pos <- topGOtable(probesPC4pos, BGids, annot = annFUN.org, mapping = annopkg, ...)
-  topGOpc4neg <- topGOtable(probesPC4neg, BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc1pos <- mosdef::run_topGO(de_genes = probesPC1pos, 
+                                   bg_genes = BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc1neg <- mosdef::run_topGO(de_genes = probesPC1neg, 
+                                   bg_genes = BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc2pos <- mosdef::run_topGO(de_genes = probesPC2pos, 
+                                   bg_genes = BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc2neg <- mosdef::run_topGO(de_genes = probesPC2neg, 
+                                   bg_genes = BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc3pos <- mosdef::run_topGO(de_genes = probesPC3pos, 
+                                   bg_genes = BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc3neg <- mosdef::run_topGO(de_genes = probesPC3neg, 
+                                   bg_genes = BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc4pos <- mosdef::run_topGO(de_genes = probesPC4pos, 
+                                   bg_genes = BGids, annot = annFUN.org, mapping = annopkg, ...)
+  topGOpc4neg <- mosdef::run_topGO(de_genes = probesPC4neg, 
+                                   bg_genes = BGids, annot = annFUN.org, mapping = annopkg, ...)
 
   goEnrichs <- list(PC1 = list(posLoad = topGOpc1pos, negLoad = topGOpc1neg),
                     PC2 = list(posLoad = topGOpc2pos, negLoad = topGOpc2neg),
@@ -159,175 +283,23 @@ rankedGeneLoadings <- function(x, pc = 1, decreasing = TRUE) {
 }
 
 
-#' Extract functional terms enriched in the DE genes, based on topGO
-#'
-#' A wrapper for extracting functional GO terms enriched in the DE genes, based on
-#' the algorithm and the implementation in the topGO package
-#' 
-#' Allowed values assumed by the \code{topGO_method2} parameter are one of the
-#' following: \code{elim}, \code{weight}, \code{weight01}, \code{lea}, 
-#' \code{parentchild}. For more details on this, please refer to the original 
-#' documentation of the \code{topGO} package itself
-#'
-#' @param DEgenes A vector of (differentially expressed) genes
-#' @param BGgenes A vector of background genes, e.g. all (expressed) genes in the assays
-#' @param ontology Which Gene Ontology domain to analyze: \code{BP} (Biological Process), \code{MF} (Molecular Function), or \code{CC} (Cellular Component)
-#' @param annot Which function to use for annotating genes to GO terms. Defaults to \code{annFUN.org}
-#' @param mapping Which \code{org.XX.eg.db} to use for annotation - select according to the species
-#' @param geneID Which format the genes are provided. Defaults to \code{symbol}, could also be
-#' \code{entrez} or \code{ENSEMBL}
-#' @param topTablerows How many rows to report before any filtering
-#' @param fullNamesInRows Logical, whether to display or not the full names for the GO terms
-#' @param addGeneToTerms Logical, whether to add a column with all genes annotated to each GO term
-#' @param plotGraph Logical, if TRUE additionally plots a graph on the identified GO terms
-#' @param plotNodes Number of nodes to plot
-#' @param writeOutput Logical, if TRUE additionally writes out the result to a file
-#' @param outputFile Name of the file the result should be written into
-#' @param topGO_method2 Character, specifying which of the methods implemented by \code{topGO} should be used, in addition to the \code{classic} algorithm. Defaults to \code{elim}
-#' @param do_padj Logical, whether to perform the adjustment on the p-values from the specific
-#' topGO method, based on the FDR correction. Defaults to FALSE, since the assumption of 
-#' independent hypotheses is somewhat violated by the intrinsic DAG-structure of the Gene
-#' Ontology Terms
-#'
-#' @import topGO
-#'
-#' @return A table containing the computed GO Terms and related enrichment scores
-#'
-#' @examples
-#' library(airway)
-#' library(DESeq2)
-#' data(airway)
-#' airway
-#' dds_airway <- DESeqDataSet(airway, design= ~ cell + dex)
-#' # Example, performing extraction of enriched functional categories in
-#' # detected significantly expressed genes
-#' \dontrun{
-#' dds_airway <- DESeq(dds_airway)
-#' res_airway <- results(dds_airway)
-#' library("AnnotationDbi")
-#' library("org.Hs.eg.db")
-#' res_airway$symbol <- mapIds(org.Hs.eg.db,
-#'                             keys = row.names(res_airway),
-#'                             column = "SYMBOL",
-#'                             keytype = "ENSEMBL",
-#'                             multiVals = "first")
-#' res_airway$entrez <- mapIds(org.Hs.eg.db,
-#'                             keys = row.names(res_airway),
-#'                             column = "ENTREZID",
-#'                             keytype = "ENSEMBL",
-#'                             multiVals = "first")
-#' resOrdered <- as.data.frame(res_airway[order(res_airway$padj),])
-#' de_df <- resOrdered[resOrdered$padj < .05 & !is.na(resOrdered$padj),]
-#' de_symbols <- de_df$symbol
-#' bg_ids <- rownames(dds_airway)[rowSums(counts(dds_airway)) > 0]
-#' bg_symbols <- mapIds(org.Hs.eg.db,
-#'                      keys = bg_ids,
-#'                      column = "SYMBOL",
-#'                      keytype = "ENSEMBL",
-#'                      multiVals = "first")
-#' library(topGO)
-#' topgoDE_airway <- topGOtable(de_symbols, bg_symbols,
-#'                              ontology = "BP",
-#'                              mapping = "org.Hs.eg.db",
-#'                              geneID = "symbol")
-#' }
-#'
-#' @export
-topGOtable <- function(DEgenes,                  # Differentially expressed genes
-                       BGgenes,                 # background genes
-                       ontology = "BP",            # could use also "MF"
-                       annot = annFUN.org,       # parameters for creating topGO object
-                       mapping = "org.Mm.eg.db",
-                       geneID = "symbol",       # could also beID = "entrez"
-                       topTablerows = 200,
-                       fullNamesInRows = TRUE,
-                       addGeneToTerms = TRUE,
-                       plotGraph = FALSE, 
-                       plotNodes = 10,
-                       writeOutput = FALSE, 
-                       outputFile = "",
-                       topGO_method2 = "elim",
-                       do_padj = FALSE) {
-  # checking the additional topGO_method2
-  topgo_methods <- c("elim", "weight", "weight01", "lea", "parentchild")
-  if (!(topGO_method2 %in% topgo_methods))
-     stop("Please provide one of the following topGO methods in addition to the classic method:\n",
-          paste(topgo_methods, collapse = ", "))
-  # creating the vectors
-  DEgenes_input <- factor(as.integer(BGgenes %in% DEgenes))
-  names(DEgenes_input) <- BGgenes
-  # instantiating the topGOdata object
-  GOdata <- new("topGOdata",
-                ontology = ontology,
-                allGenes = DEgenes_input,
-                nodeSize = 10,
-                annot = annot,
-                mapping = mapping,
-                ID = geneID)
-  # performing the test(s)
-  result_method2 <- runTest(GOdata, algorithm = topGO_method2, statistic = "fisher")
-  resultClassic <- runTest(GOdata, algorithm = "classic", statistic = "fisher")
-  sTab <- GenTable(GOdata,
-                   p.value_method2 = result_method2,
-                   p.value_classic = resultClassic,
-                   orderBy = "p.value_method2",
-                   ranksOf = "p.value_classic",
-                   topNodes = length(score(resultClassic)))
-  
-  names(sTab)[which(names(sTab) == "p.value_method2")] <- paste0("p.value_", topGO_method2)
-  
-  sTab[["p.value_classic"]] <- as.numeric(sTab[["p.value_classic"]])
-  sTab[[paste0("p.value_", topGO_method2)]] <- as.numeric(sTab[[paste0("p.value_", topGO_method2)]])
-  
-  # if FDR, then apply it here
-  if (do_padj)
-    sTab[[paste0("padj_BY_", topGO_method2)]] <- p.adjust(sTab[[paste0("p.value_", topGO_method2)]], method = "BY")
-  
-  # subset to specified number of rows
-  topTablerows <- min(nrow(sTab), topTablerows)
-  sTab <- sTab[seq_len(topTablerows), ]
-  
-  if (fullNamesInRows) {
-    sTab$Term <- sapply(sTab$GO.ID, function(go) {
-      Term(GOTERM[[go]])
-    })
-  }
 
-  if (addGeneToTerms) {
-    # adapted from an elegant one liner found here: https://support.bioconductor.org/p/65856/
-    SignificantGenes <- sigGenes(GOdata)
-    sTab$genes <- sapply(sTab$GO.ID, function(x) {
-      genes <- genesInTerm(GOdata, x)
-      tmp <- genes[[1]][genes[[1]] %in% SignificantGenes]
-    })
-    # coerce the list to a comma separated vector
-    sTab$genes <- unlist(lapply(sTab$genes, function(arg) paste(arg, collapse = ",")))
-  }
-
-  # write all entries of the table
-  if (writeOutput) write.table(sTab, file = outputFile, sep = "\t", quote = FALSE, col.names = TRUE, row.names = FALSE)
-  if (plotGraph) showSigOfNodes(GOdata, topGO::score(result_method2), firstSigNodes = plotNodes, useInfo = "all")
-  #   if(outputToLatex) sTabSig <- xtable(apply(sTabSig[1:15,], 2, as.character)) # take a smaller subset
-
-  # and returns the significant ones # or all, like here
-  return(sTab)
-}
 
 #' Functional interpretation of the principal components, based on simple
 #' overrepresentation analysis
 #'
 #' Extracts the genes with the highest loadings for each principal component, and
 #' performs functional enrichment analysis on them using the simple and quick routine
-#' provided by the \code{limma} package
+#' provided by the `limma` package
 #'
-#' @param se A \code{\link{DESeqTransform}} object, with data in \code{assay(se)},
-#' produced for example by either \code{\link{rlog}} or
-#' \code{\link{varianceStabilizingTransformation}}
+#' @param se A [DESeqTransform()] object, with data in `assay(se)`,
+#' produced for example by either [rlog()] or
+#' [varianceStabilizingTransformation()]
 #' @param pca_ngenes Number of genes to use for the PCA
-#' @param inputType Input format type of the gene identifiers. Deafults to \code{ENSEMBL}, that then will
-#' be converted to ENTREZ ids. Can assume values such as \code{ENTREZID},\code{GENENAME} or \code{SYMBOL},
-#' like it is normally used with the \code{select} function of \code{AnnotationDbi}
-#' @param organism Character abbreviation for the species, using \code{org.XX.eg.db} for annotation
+#' @param inputType Input format type of the gene identifiers. Deafults to `ENSEMBL`, that then will
+#' be converted to ENTREZ ids. Can assume values such as `ENTREZID`,`GENENAME` or `SYMBOL`,
+#' like it is normally used with the `select` function of `AnnotationDbi`
+#' @param organism Character abbreviation for the species, using `org.XX.eg.db` for annotation
 #' @param loadings_ngenes Number of genes to extract the loadings (in each direction)
 #' @param background_genes Which genes to consider as background.
 #' @param scale Logical, defaults to FALSE, scale values for the PCA
@@ -335,13 +307,13 @@ topGOtable <- function(DEgenes,                  # Differentially expressed gene
 #'
 #' @return A nested list object containing for each principal component the terms enriched
 #' in each direction. This object is to be thought in combination with the displaying feature
-#' of the main \code{\link{pcaExplorer}} function
+#' of the main [pcaExplorer()] function
 #'
 #' @examples
-#' library(airway)
-#' library(DESeq2)
-#' library(limma)
-#' data(airway)
+#' library("airway")
+#' library("DESeq2")
+#' library("limma")
+#' data("airway", package = "airway")
 #' airway
 #' dds_airway <- DESeqDataSet(airway, design = ~ cell + dex)
 #' \dontrun{
@@ -386,7 +358,7 @@ limmaquickpca2go <- function(se,
   rv <- rowVars(exprsData)
   dropped <- sum(rv == 0)
   if (dropped > 0)
-    message(paste("Dropped", dropped, "genes with 0 variance"))
+    message("Dropped ", dropped, " genes with 0 variance")
 
   exprsData <- exprsData[rv > 0, ]
 
