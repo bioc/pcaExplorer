@@ -42,7 +42,7 @@ pair_corr <- function(df, log = FALSE, method = "pearson", use_subset = TRUE) {
   title <- "Pairwise Correlations"
   # Modified from R pairs() documentation
   panel.cor <- function(x, y, digits = 2, prefix = "", cex.cor, ...) {
-    usr <- par("usr"); on.exit(par(usr))
+    usr <- par("usr"); on.exit(par(usr = usr))
     par(usr = c(0, 1, 0, 1))
     r <- abs(cor(x, y, method = method))
     txt <- format(c(r, 0.123456789), digits = digits)[1]
