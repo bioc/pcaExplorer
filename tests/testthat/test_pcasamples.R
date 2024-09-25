@@ -1,22 +1,21 @@
-library(pcaExplorer)
-
-context("Checks on the pca on the samples")
-
-library(DESeq2)
-dds <- makeExampleDESeqDataSet_multifac(betaSD_condition = 3, betaSD_tissue = 1)
-rlt <- rlogTransformation(dds)
-pcaobj <- prcomp(t(assay(rlt)))
-
-colData(dds)
-
-pcaplot(rlt)
-dat <- pcaplot(rlt, returnData = TRUE)
-
-pcaplot(rlt, intgroup = c("condition", "tissue"))
-dat <- pcaplot(rlt, intgroup = c("condition", "tissue"), returnData = TRUE)
-
-expect_error(pcaplot(rlt, intgroup = "foo"))
-
-pcascree(pcaobj)
-pcascree(pcaobj, type = "cev")
-expect_error(pcascree(pcaobj, type = "foo"))
+test_that("Checks on the pca on the samples", {
+  pcaobj <- prcomp(t(assay(rlt_multifac)))
+  
+  colData(dds_multifac)
+  
+  pcaplot(rlt_multifac)
+  dat <- pcaplot(rlt_multifac, returnData = TRUE)
+  
+  p <- pcaplot(rlt_multifac, intgroup = c("condition", "tissue"))
+  expect_true(is(p, "gg"))
+  
+  dat <- pcaplot(rlt_multifac, intgroup = c("condition", "tissue"), returnData = TRUE)
+  
+  expect_error(pcaplot(rlt_multifac, intgroup = "foo"))
+  
+  p2 <- pcascree(pcaobj)
+  expect_true(is(p2, "gg"))
+  p3 <- pcascree(pcaobj, type = "cev")
+  expect_true(is(p3, "gg"))
+  expect_error(pcascree(pcaobj, type = "foo"))
+})
