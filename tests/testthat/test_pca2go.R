@@ -19,12 +19,17 @@ test_that("Checks on the functional enrichment of subset of genes/genes with hi 
   #                              geneID = "symbol")
   #
   # expect_is(topgoDE_airway,"data.frame")
-  ngenes_pca <- 10000
+  ngenes_pca <- 500
   
-  # goquick_airway <- limmaquickpca2go(rld_airway,
-  #                                    pca_ngenes = ngenes_pca,
-  #                                    inputType = "ENSEMBL",
-  #                                    organism = "Hs")
+  goquick_airway <- limmaquickpca2go(rld_airway,
+                                     pca_ngenes = ngenes_pca,
+                                     inputType = "ENSEMBL",
+                                     organism = "Hs")
+  
+  expect_type(goquick_airway, "list")
+  expect_equal(length(goquick_airway), 4)
+  sapply(goquick_airway, names)
+  expect_equal(attr(goquick_airway, "n_genesforpca"), ngenes_pca)
   
   expect_error(
     expect_warning(
@@ -34,16 +39,4 @@ test_that("Checks on the functional enrichment of subset of genes/genes with hi 
                                 organism = "foo")
     )
   ) # additionally throws a warning
-  
-  # expect_is(goquick_airway, "list")
-  # expect_equal(length(goquick_airway), 4) # ensure all pcs are there
-  # sapply(goquick_airway, names)
-  #
-  # expect_equal(attr(goquick_airway, "n_genesforpca"), ngenes_pca)
-  
 })
-
-
-
-
-
