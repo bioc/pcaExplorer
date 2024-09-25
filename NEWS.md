@@ -1,5 +1,9 @@
 # pcaExplorer 2.99.0
 
+## New features
+
+* The `pcaplot()` function now provides a clever default for the `intgroup` parameter, if some content (as it should) is provided in the `colData` slot of the main input object
+
 ## Other notes
 
 * The transition to the functions available in the `mosdef` Bioconductor is complete, with the original functions now being deprecated. This applies to `topGOtable()` (now replaced by `mosdef::run_topGO()`)
