@@ -6,7 +6,7 @@
 \usage{
 pcaplot(
   x,
-  intgroup = "condition",
+  intgroup = NULL,
   ntop = 500,
   returnData = FALSE,
   title = NULL,
@@ -21,10 +21,11 @@ pcaplot(
 \arguments{
 \item{x}{A \code{\link[=DESeqTransform]{DESeqTransform()}} object, with data in \code{assay(x)},
 produced for example by either \code{\link[=rlog]{rlog()}} or
-\code{\link[=varianceStabilizingTransformation]{varianceStabilizingTransformation()}}}
+\code{\link[=varianceStabilizingTransformation]{varianceStabilizingTransformation()}}/\code{\link[=vst]{vst()}}}
 
 \item{intgroup}{Interesting groups: a character vector of
-names in \code{colData(x)} to use for grouping}
+names in \code{colData(x)} to use for grouping. Defaults to NULL, which would then
+select the first column of the \code{colData} slot}
 
 \item{ntop}{Number of top genes to use for principal components,
 selected by highest row variance}

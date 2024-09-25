@@ -4,9 +4,10 @@
 #'
 #' @param x A [DESeqTransform()] object, with data in `assay(x)`,
 #' produced for example by either [rlog()] or
-#' [varianceStabilizingTransformation()]
+#' [varianceStabilizingTransformation()]/[vst()]
 #' @param intgroup Interesting groups: a character vector of
-#' names in `colData(x)` to use for grouping
+#' names in `colData(x)` to use for grouping. Defaults to NULL, which would then 
+#' select the first column of the `colData` slot
 #' @param ntop Number of top genes to use for principal components,
 #' selected by highest row variance
 #' @param returnData logical, if TRUE returns a data.frame for further use, containing the
@@ -27,15 +28,33 @@
 #' pcaplot(rlt, ntop = 200)
 #'
 #' @export
-pcaplot <- function (x, intgroup = "condition", ntop = 500, returnData = FALSE,title = NULL,
-                    pcX = 1, pcY = 2, text_labels = TRUE, point_size = 3,
-                    ellipse = TRUE, ellipse.prob = 0.95) # customized principal components
+pcaplot <- function(x, 
+                    intgroup = NULL, 
+                    ntop = 500, 
+                    returnData = FALSE,
+                    title = NULL,
+                    pcX = 1, 
+                    pcY = 2, 
+                    text_labels = TRUE, 
+                    point_size = 3,
+                    ellipse = TRUE, 
+                    ellipse.prob = 0.95) # customized principal components
 {
   rv <- rowVars(assay(x))
   select <- order(rv, decreasing = TRUE)[seq_len(min(ntop, length(rv)))]
   pca <- prcomp(t(assay(x)[select, ]))
 
   percentVar <- pca$sdev^2/sum(pca$sdev^2)
+  
+  if (is.null(intgroup)) {
+    # gently fall back to the first colData element if it is there
+    if (length(names(colData(x))) > 0) {
+      intgroup <- names(colData(x))[1]
+      message("Defaulting to '", intgroup, "' as the `intgroup` parameter...")
+    } else {
+      stop("No colData has been provided, therefore `intgroup` cannot be selected properly")
+    }
+  }
 
   if (!all(intgroup %in% names(colData(x)))) {
     stop("the argument 'intgroup' should specify columns of colData(x)")
